@@ -6,24 +6,35 @@ import com.piggymetrics.statistics.domain.timeseries.DataPoint;
 import com.piggymetrics.statistics.domain.timeseries.DataPointId;
 import com.piggymetrics.statistics.domain.timeseries.ItemMetric;
 import com.piggymetrics.statistics.domain.timeseries.StatisticMetric;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(SpringRunner.class)
+@Testcontainers
 @DataMongoTest
 public class DataPointRepositoryTest {
 
 	@Autowired
 	private DataPointRepository repository;
+
+	@Container
+	static MongoDBContainer mongo = new MongoDBContainer("mongo:7.0");
+
+	@DynamicPropertySource
+	static void mongoProps(DynamicPropertyRegistry registry) {
+		registry.add("spring.data.mongodb.uri", mongo::getReplicaSetUrl);
+	}
 
 	@Test
 	public void shouldSaveDataPoint() {

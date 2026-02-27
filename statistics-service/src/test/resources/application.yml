@@ -7,10 +7,8 @@ hystrix:
             timeoutInMilliseconds: 20000
 
 spring:
-  data:
-    mongodb:
-      database: piggymetrics
-      port: 0
+  config:
+    import: "optional:configserver:"
 
 rates:
   url: https://api.exchangeratesapi.io

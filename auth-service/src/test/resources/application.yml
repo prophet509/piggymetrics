@@ -1,5 +1,15 @@
 spring:
-  data:
-    mongodb:
-      database: piggymetrics
-      port: 0
+  config:
+    import: "optional:configserver:"
+  cloud:
+    discovery:
+      enabled: false
+    service-registry:
+      auto-registration:
+        enabled: false
+
+eureka:
+  client:
+    enabled: false
+    register-with-eureka: false
+    fetch-registry: false

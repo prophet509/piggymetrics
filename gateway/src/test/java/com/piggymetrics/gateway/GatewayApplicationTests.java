@@ -1,12 +1,14 @@
 package com.piggymetrics.gateway;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.cloud.netflix.eureka.EurekaClientAutoConfiguration;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(properties = {
+    "spring.config.import=optional:configserver:",
+    "eureka.client.enabled=false"
+})
 public class GatewayApplicationTests {
 
 	@Test
