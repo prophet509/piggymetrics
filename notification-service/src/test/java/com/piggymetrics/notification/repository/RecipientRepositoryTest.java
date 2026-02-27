@@ -5,26 +5,37 @@ import com.piggymetrics.notification.domain.Frequency;
 import com.piggymetrics.notification.domain.NotificationSettings;
 import com.piggymetrics.notification.domain.NotificationType;
 import com.piggymetrics.notification.domain.Recipient;
-import org.apache.commons.lang.time.DateUtils;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.apache.commons.lang3.time.DateUtils;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(SpringRunner.class)
+@Testcontainers
 @DataMongoTest
 public class RecipientRepositoryTest {
 
 	@Autowired
 	private RecipientRepository repository;
+
+	@Container
+	static MongoDBContainer mongo = new MongoDBContainer("mongo:7.0");
+
+	@DynamicPropertySource
+	static void mongoProps(DynamicPropertyRegistry registry) {
+		registry.add("spring.data.mongodb.uri", mongo::getReplicaSetUrl);
+	}
 
 	@Test
 	public void shouldFindByAccountName() {

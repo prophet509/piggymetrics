@@ -1,7 +1,10 @@
-FROM java:8-jre
-MAINTAINER Alexander Lukyanchikov <sqshq@sqshq.com>
+FROM eclipse-temurin:25-jre
+LABEL maintainer="halfbloodprincess9@gmail.com"
 
-ADD ./target/registry.jar /app/
-CMD ["java", "-Xmx200m", "-jar", "/app/registry.jar"]
+WORKDIR /app
+COPY ./target/registry.jar /app/registry.jar
+
+ENV JAVA_OPTS=""
+CMD ["sh", "-c", "java  -Xmx200m -jar /app/registry.jar"]
 
 EXPOSE 8761

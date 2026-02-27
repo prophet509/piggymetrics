@@ -1,9 +1,10 @@
-FROM java:8-jre
-MAINTAINER Alexander Lukyanchikov <sqshq@sqshq.com>
+FROM eclipse-temurin:25-jre
+LABEL maintainer="halfbloodprincess9@gmail.com"
 
-ADD ./target/config.jar /app/
-CMD ["java", "-Xmx200m", "-jar", "/app/config.jar"]
+WORKDIR /app
+COPY ./target/config.jar /app/config.jar
 
-HEALTHCHECK --interval=30s --timeout=30s CMD curl -f http://localhost:8888/actuator/health || exit 1
+ENV JAVA_OPTS=""
+CMD ["sh", "-c", "java  -Xmx200m -jar /app/config.jar"]
 
 EXPOSE 8888

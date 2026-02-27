@@ -8,55 +8,92 @@ services:
     build: config
     ports:
       - 8888:8888
+    environment:
+      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
 
   registry:
     build: registry
+    environment:
+      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
 
   gateway:
     build: gateway
+    environment:
+      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
 
   auth-service:
     build: auth-service
     ports:
       - 5000:5000
+    environment:
+      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
+      NOTIFICATION_SERVICE_PASSWORD: ${NOTIFICATION_SERVICE_PASSWORD}
+      STATISTICS_SERVICE_PASSWORD: ${STATISTICS_SERVICE_PASSWORD}
+      ACCOUNT_SERVICE_PASSWORD: ${ACCOUNT_SERVICE_PASSWORD}
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
 
   auth-mongodb:
     build: mongodb
     ports:
       - 25000:27017
+    environment:
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
 
   account-service:
     build: account-service
     ports:
       - 6000:6000
+    environment:
+      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
+      ACCOUNT_SERVICE_PASSWORD: ${ACCOUNT_SERVICE_PASSWORD}
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
 
   account-mongodb:
     build: mongodb
     ports:
       - 26000:27017
+    environment:
+      INIT_DUMP: account-service-dump.js
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
 
   statistics-service:
     build: statistics-service
     ports:
       - 7000:7000
+    environment:
+      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+      STATISTICS_SERVICE_PASSWORD: ${STATISTICS_SERVICE_PASSWORD}
 
   statistics-mongodb:
     build: mongodb
     ports:
       - 27000:27017
+    environment:
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
 
   notification-service:
     build: notification-service
     ports:
       - 8000:8000
+    environment:
+      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+      NOTIFICATION_SERVICE_PASSWORD: ${NOTIFICATION_SERVICE_PASSWORD}
 
   notification-mongodb:
     build: mongodb
     ports:
       - 28000:27017
+    environment:
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
 
   monitoring:
     build: monitoring
+    environment:
+      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}
 
   turbine-stream-service:
     build: turbine-stream-service
+    environment:
+      CONFIG_SERVICE_PASSWORD: ${CONFIG_SERVICE_PASSWORD}

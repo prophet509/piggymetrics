@@ -13,8 +13,13 @@ services:
   config:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: sqshq/piggymetrics-config
+    image: config:1.0.0-SNAPSHOT
     restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     logging:
       options:
         max-size: "10m"
@@ -23,7 +28,7 @@ services:
   registry:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: sqshq/piggymetrics-registry
+    image: registry:0.0.1-SNAPSHOT
     restart: always
     depends_on:
       config:
@@ -38,7 +43,7 @@ services:
   gateway:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: sqshq/piggymetrics-gateway
+    image: gateway:1.0-SNAPSHOT
     restart: always
     depends_on:
       config:
@@ -57,7 +62,7 @@ services:
       STATISTICS_SERVICE_PASSWORD: $STATISTICS_SERVICE_PASSWORD
       ACCOUNT_SERVICE_PASSWORD: $ACCOUNT_SERVICE_PASSWORD
       MONGODB_PASSWORD: $MONGODB_PASSWORD
-    image: sqshq/piggymetrics-auth-service
+    image: auth-service:1.0-SNAPSHOT
     restart: always
     depends_on:
       config:
@@ -70,7 +75,7 @@ services:
   auth-mongodb:
     environment:
       MONGODB_PASSWORD: $MONGODB_PASSWORD
-    image: sqshq/piggymetrics-mongodb
+    image: mongo:7.0
     restart: always
     logging:
       options:
@@ -82,7 +87,7 @@ services:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
       ACCOUNT_SERVICE_PASSWORD: $ACCOUNT_SERVICE_PASSWORD
       MONGODB_PASSWORD: $MONGODB_PASSWORD
-    image: sqshq/piggymetrics-account-service
+    image: account-service:1.0-SNAPSHOT
     restart: always
     depends_on:
       config:
@@ -96,7 +101,7 @@ services:
     environment:
       INIT_DUMP: account-service-dump.js
       MONGODB_PASSWORD: $MONGODB_PASSWORD
-    image: sqshq/piggymetrics-mongodb
+    image: mongo:7.0
     restart: always
     logging:
       options:
@@ -108,7 +113,7 @@ services:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
       MONGODB_PASSWORD: $MONGODB_PASSWORD
       STATISTICS_SERVICE_PASSWORD: $STATISTICS_SERVICE_PASSWORD
-    image: sqshq/piggymetrics-statistics-service
+    image: statistics-service:1.0-SNAPSHOT
     restart: always
     depends_on:
       config:
@@ -121,7 +126,7 @@ services:
   statistics-mongodb:
     environment:
       MONGODB_PASSWORD: $MONGODB_PASSWORD
-    image: sqshq/piggymetrics-mongodb
+    image: mongo:7.0
     restart: always
     logging:
       options:
@@ -133,7 +138,7 @@ services:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
       MONGODB_PASSWORD: $MONGODB_PASSWORD
       NOTIFICATION_SERVICE_PASSWORD: $NOTIFICATION_SERVICE_PASSWORD
-    image: sqshq/piggymetrics-notification-service
+    image: notification-service:1.0.0-SNAPSHOT
     restart: always
     depends_on:
       config:
@@ -144,7 +149,7 @@ services:
         max-file: "10"
 
   notification-mongodb:
-    image: sqshq/piggymetrics-mongodb
+    image: mongo:7.0
     restart: always
     environment:
       MONGODB_PASSWORD: $MONGODB_PASSWORD
@@ -156,7 +161,7 @@ services:
   monitoring:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: sqshq/piggymetrics-monitoring
+    image: monitoring:0.0.1-SNAPSHOT
     restart: always
     depends_on:
       config:
@@ -171,7 +176,7 @@ services:
   turbine-stream-service:
     environment:
       CONFIG_SERVICE_PASSWORD: $CONFIG_SERVICE_PASSWORD
-    image: sqshq/piggymetrics-turbine-stream-service
+    image: turbine-stream-service:0.0.1-SNAPSHOT
     restart: always
     depends_on:
       config:
